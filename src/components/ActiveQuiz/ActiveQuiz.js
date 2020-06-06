@@ -1,23 +1,24 @@
 import React from 'react';
-import Quiz from '../../containers/quiz/Quiz.module.css'
 import styles from './ActiveQuiz.module.css';
+import AnswersList from './AnswersList/AnswersList';
 
 const ActiveQuiz = props => {
     return (
         <div className={styles.ActiveQuiz}>
             <p className={styles.Question}>
                 <span>
-                    <strong>2.</strong>&nbsp;
-                    Как дела
+                    <strong>{props.answerNumber}.</strong>&nbsp;
+                    {props.question}
                 </span>
-                <small>2 из 12</small>
+                <small>{props.answerNumber} из {props.quizLength}</small>
             </p>
-            <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-            </ul>
+
+          <AnswersList answers={props.answers}
+                       answerId={props.answerId}
+                       answerStatus={props.answerStatus}
+
+          />
+
 
         </div>
 
