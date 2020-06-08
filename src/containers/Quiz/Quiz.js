@@ -35,14 +35,13 @@ class Quiz extends Component {
         ],
     };
 
-    onAnswerClickHandler = (answerId) => {
+    onAnswerClickHandler = answerId => {
 
         if(this.state.answerStatus) {
-            console.log(Object.keys(this.state.answerStatus)[0])
 
-            const key = Object.keys(this.state.answerStatus)[0]
-            if (this.state.answerStatus[key] === 'success') {
-                return
+            const key = Object.keys( this.state.answerStatus )[0];
+            if(this.state.answerStatus[key] === 'success') {
+                return;
             }
         }
 
@@ -52,34 +51,34 @@ class Quiz extends Component {
         if(question.rightAnswerId === answerId) {
 
             if(!results[question.id]) {
-                results[question.id] = 'success'
+                results[question.id] = 'success';
             }
 
-            this.setState({
+            this.setState( {
                 answerStatus: { [answerId]: 'success' },
-                results
-            })
+                results,
+            } );
 
             const timeout = window.setTimeout( () => {
                 if(this.isQuizFinished()) {
-                    this.setState({
-                        isFinished: true
-                    })
+                    this.setState( {
+                        isFinished: true,
+                    } );
                 } else {
                     this.setState( {
                         activeQuestion: this.state.activeQuestion + 1,
-                        answerStatus: null
+                        answerStatus: null,
                     } );
                 }
                 window.clearTimeout( timeout );
             }, 1000 );
 
         } else {
-            results[question.id] = 'error'
-            this.setState({
+            results[question.id] = 'error';
+            this.setState( {
                 answerStatus: { [answerId]: 'error' },
-                results
-            })
+                results,
+            } );
         }
     };
 
@@ -88,12 +87,16 @@ class Quiz extends Component {
     }
 
     retryHandler = () => {
-        this.setState({
+        this.setState( {
             results: {},
             isFinished: false,
             activeQuestion: 0,
             answerStatus: null,
-        })
+        } );
+    };
+
+    componentDidMount() {
+        console.log('Quiz ID = ', this.props.match.params.id)
     }
 
     render() {
@@ -102,21 +105,21 @@ class Quiz extends Component {
                 <div className={styles.QuizWrapper}>
                     <h1>Ответьте на вопросы</h1>
 
-                    { this.state.isFinished
+                    {this.state.isFinished
                         ? <FinishedQuiz
                             results={this.state.results}
                             quiz={this.state.quiz}
                             onRetry={this.retryHandler}
 
                         />
-                    :<ActiveQuiz
-                        question={this.state.quiz[this.state.activeQuestion].question}
-                        answers={this.state.quiz[this.state.activeQuestion].answers}
-                        answerId={this.onAnswerClickHandler}
-                        answerNumber={this.state.activeQuestion + 1}
-                        quizLength={this.state.quiz.length}
-                        answerStatus={this.state.answerStatus}
-                    />
+                        : <ActiveQuiz
+                            question={this.state.quiz[this.state.activeQuestion].question}
+                            answers={this.state.quiz[this.state.activeQuestion].answers}
+                            answerId={this.onAnswerClickHandler}
+                            answerNumber={this.state.activeQuestion + 1}
+                            quizLength={this.state.quiz.length}
+                            answerStatus={this.state.answerStatus}
+                        />
                     }
                 </div>
             </div>

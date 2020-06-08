@@ -1,0 +1,42 @@
+.Nav {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 80%;
+    max-width: 300px;
+    padding: 20px 10px;
+    box-sizing: border-box;
+    background: white;
+    z-index: 90;
+    transform: translateX(0px);
+    transition: transform .22s ease-in;
+}
+
+.Nav.close {
+    transform: translateX(-300px);
+}
+
+.Nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.Nav ul li {
+    margin-bottom: 15px;
+}
+
+.Nav ul li a {
+    color: #363d54;
+    font-size: 30px;
+    text-decoration: none;
+    background-color: #fff;
+    position: relative;
+    padding: 0 20px 10px 20px;
+    transition: opacity .3s;
+}
+
+.Nav ul li a:hover, .active {
+    opacity: .7;
+}

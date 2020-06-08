@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './FinishedQuiz.module.css';
 import Button from '../UI/Button/Button';
+import { Link } from 'react-router-dom';
 
 const FinishedQuiz = props => {
 
@@ -27,7 +28,7 @@ const FinishedQuiz = props => {
                             <li key={index}>
                                 <strong>{index + 1}</strong>.&nbsp;
                                 {quizItem.question}
-                                <i className={cls.join(' ')} />
+                                <i className={cls.join( ' ' )} />
                             </li>
                         );
                     } )
@@ -37,11 +38,13 @@ const FinishedQuiz = props => {
             <p>Правильно {successCount} из {props.quiz.length}</p>
             <div>
                 <Button onClick={props.onRetry} type='primary'>Повторить</Button>
-                <Button type='success'>В список тестов</Button>
+                <Link to={'/'}>
+                    <Button type='success'>В список тестов</Button>
+                </Link>
             </div>
-
         </div>
     );
 };
+
 
 export default FinishedQuiz;
