@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Input.module.css';
 
-function isInvalid(valid, touched, shouldValidate) {
+function isInvalid({ valid, touched, shouldValidate }) {
     return !valid && shouldValidate && touched
 }
 
@@ -10,7 +10,7 @@ const Input = props => {
     const cls = [ styles.Input ];
     const htmlFor = `${inputType}-${Math.floor( Math.random() * 100 )}`;
 
-    if(isInvalid) {
+    if(isInvalid(props)) {
         cls.push( styles.invalid );
     }
 
