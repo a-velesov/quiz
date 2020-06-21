@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './Quiz.module.css';
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
+import axios from '../../axios/axios-quiz';
+import Loader from '../../components/UI/Loader/Loader';
 
 class Quiz extends Component {
     state = {
@@ -9,30 +11,8 @@ class Quiz extends Component {
         isFinished: false,
         activeQuestion: 0,
         answerStatus: null, // {[id]: 'success' 'error'}
-        quiz: [
-            {
-                question: 'Что вы ответите на вопрос "Кем вы видите себя через 5 лет?"',
-                rightAnswerId: 2,
-                id: 1,
-                answers: [
-                    { text: '"Извините, я ослеп от блестящих перспектив"', id: 1 },
-                    { text: 'Достанете хрустальный шар и попросите не беспокоить 10 минут', id: 2 },
-                    { text: '"Вашим директором"', id: 3 },
-                    { text: 'Начнете плакать', id: 4 },
-                ],
-            },
-            {
-                question: 'Какие ваши зарплатные ожидания?',
-                rightAnswerId: 3,
-                id: 2,
-                answers: [
-                    { text: 'На "Вау, это все мне?"', id: 1 },
-                    { text: 'Достанете счетную машинку', id: 2 },
-                    { text: 'Скажете, что готовы работать по 12 часов в день за идею', id: 3 },
-                    { text: 'Укажете на то, что в резюме указана сумма', id: 4 },
-                ],
-            },
-        ],
+        quiz: [],
+        loading: true,
     };
 
     onAnswerClickHandler = answerId => {
@@ -95,8 +75,21 @@ class Quiz extends Component {
         } );
     };
 
-    componentDidMount() {
-        console.log('Quiz ID = ', this.props.match.params.id)
+    async componentDidMount() {
+
+        try {
+            const response = await axios.get( `quiz/${this.props.match.params.id}.json` );
+            const quiz = response.data;
+
+            this.setState({
+                quiz,
+                loading: false
+            })
+        } catch(e) {
+            console.log( e );
+        }
+
+        console.log( 'Quiz ID = ', this.props.match.params.id );
     }
 
     render() {
@@ -105,22 +98,26 @@ class Quiz extends Component {
                 <div className={styles.QuizWrapper}>
                     <h1>Ответьте на вопросы</h1>
 
-                    {this.state.isFinished
-                        ? <FinishedQuiz
-                            results={this.state.results}
-                            quiz={this.state.quiz}
-                            onRetry={this.retryHandler}
+                    {
+                        this.state.loading
+                        ? <Loader />
+                        : this.state.isFinished
+                            ? <FinishedQuiz
+                                results={this.state.results}
+                                quiz={this.state.quiz}
+                                onRetry={this.retryHandler}
 
-                        />
-                        : <ActiveQuiz
-                            question={this.state.quiz[this.state.activeQuestion].question}
-                            answers={this.state.quiz[this.state.activeQuestion].answers}
-                            answerId={this.onAnswerClickHandler}
-                            answerNumber={this.state.activeQuestion + 1}
-                            quizLength={this.state.quiz.length}
-                            answerStatus={this.state.answerStatus}
-                        />
+                            />
+                            : <ActiveQuiz
+                                question={this.state.quiz[this.state.activeQuestion].question}
+                                answers={this.state.quiz[this.state.activeQuestion].answers}
+                                answerId={this.onAnswerClickHandler}
+                                answerNumber={this.state.activeQuestion + 1}
+                                quizLength={this.state.quiz.length}
+                                answerStatus={this.state.answerStatus}
+                            />
                     }
+
                 </div>
             </div>
         );
