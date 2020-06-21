@@ -16,7 +16,6 @@ class QuizList extends Component {
         } );
     }
 
-
     render() {
         return (
             <div className={styles.QuizList}>

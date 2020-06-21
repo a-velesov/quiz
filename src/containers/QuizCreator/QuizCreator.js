@@ -4,6 +4,7 @@ import Button from '../../components/UI/Button/Button';
 import { createControl, validate, validateForm } from '../../form/formFramework';
 import Input from '../../components/UI/Input/Input';
 import Select from '../../components/UI/Select/Select';
+import * as axios from 'axios';
 
 function createOptionControl(number) {
     return createControl( {
@@ -68,8 +69,24 @@ export default class QuizCreator extends Component {
         })
     };
 
-    createQuizHandler = event => {
+    createQuizHandler = async event => {
         event.preventDefault()
+
+        try {
+            await axios.post('https://react-quiz-35c91.firebaseio.com/quiz.json', this.state.quiz)
+
+            this.setState({
+                quiz: [],
+                isFormValid: false,
+                rightAnswerId: 1,
+                formControls: createFormControls(),
+            })
+
+        } catch(e) {
+            console.log(e);
+        }
+
+
     };
 
     changeHandler = (value, controlName) => {
